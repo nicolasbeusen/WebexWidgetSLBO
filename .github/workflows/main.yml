@@ -1,0 +1,43 @@
+name: Build Node.js Project in Subdirectory
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: change-rona
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: change-rona
+        run: npm install
+
+      - name: Build the project
+        working-directory: change-rona
+        run: npm run build
+
+      - name: Commit and push built files to the same branch
+        run: |
+          ls -al
+          cd ../  # Go back to repo root
+          ls -al
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add change-rona/src
+          git commit -m "Build output from ${{ github.sha }}" || echo "No changes to commit"
+          git push origin HEAD
+    
