@@ -75,11 +75,10 @@ class changeRona extends HTMLElement {
 
 		Desktop.agentContact.addEventListener("eAgentContactEnded", (e => {
 			logger.info('EndCall triggered!')
-			this.changeTab();
 		}));
 	}
 
-	
+
 	async triggerChange () {
 		await this.sleep(this.delaySeconds);
 		try {
@@ -91,18 +90,6 @@ class changeRona extends HTMLElement {
 		}
 		catch (error) {
 			logger.error(error);
-		}
-	}
-
-	async changeTab() 
-	{
-		const btn = document.querySelector('button[aria-label="RealTime Dashboard"]');
-
-		if (btn) {
-			btn.click();
-			logger.info("[change-rona] Clicked on RealTime Dashboard via aria-label ✅");
-		} else {
-			logger.warn("[change-rona] Could not find button with aria-label='RealTime Dashboard' ⚠️");
 		}
 	}
 
