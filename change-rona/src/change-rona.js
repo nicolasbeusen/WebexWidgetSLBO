@@ -76,6 +76,8 @@ class changeRona extends HTMLElement {
 
 		Desktop.agentContact.addEventListener("eAgentContactEnded", (e => {
 			logger.info('EndCall triggered!')
+			this.navigateToTabBySelector('[arial-label="Realtime Dashboard"]');
+			this.listAvailableTabs()
 		}));
 	}
 
@@ -93,6 +95,95 @@ class changeRona extends HTMLElement {
 			logger.error(error);
 		}
 	}
+
+	navigateToTabBySelector(selector) {
+		try {
+		  const tab = document.querySelector(selector);
+		  
+		  if (tab) {
+			logger.info(`[change-rona] Found tab with selector: ${selector}`);
+			tab.click();
+			return true;
+		  } else {
+			logger.warn(`[change-rona] Tab not found with selector: ${selector}`);
+			return false;
+		  }
+		} catch (error) {
+		  logger.error(`[change-rona] Navigation error: ${error}`);
+		  return false;
+		}
+	  }
+
+	  // Navigate to a specific tab using DOM manipulation
+  navigateToTabByLabel(tabLabel) {
+    try {
+      // Method 1: Find tab by aria-label or title
+      const tabs = document.querySelectorAll('[role="tab"]');
+      
+      for (let tab of tabs) {
+        const label = tab.getAttribute('aria-label') || 
+                     tab.getAttribute('title') || 
+                     tab.textContent.trim();
+        
+        if (label.toLowerCase().includes(tabLabel.toLowerCase())) {
+          logger.info(`[change-rona] Found tab: ${label}`);
+          tab.click();
+          return true;
+        }
+      }
+
+      // Method 2: Try finding by data attributes or classes
+      const navLinks = document.querySelectorAll('a[href*="nav"], .nav-item, .tab-item');
+      for (let link of navLinks) {
+        if (link.textContent.toLowerCase().includes(tabLabel.toLowerCase())) {
+          logger.info(`[change-rona] Found nav link: ${link.textContent}`);
+          link.click();
+          return true;
+        }
+      }
+
+      logger.warn(`[change-rona] Tab not found: ${tabLabel}`);
+      return false;
+    } catch (error) {
+      logger.error(`[change-rona] Navigation error: ${error}`);
+      return false;
+    }
+  }
+
+    // Navigate to tab by index (0-based)
+	navigateToTabByIndex(index) {
+		try {
+		  const tabs = document.querySelectorAll('[role="tab"]');
+		  
+		  if (tabs.length > index) {
+			logger.info(`[change-rona] Navigating to tab index: ${index}`);
+			tabs[index].click();
+			return true;
+		  } else {
+			logger.warn(`[change-rona] Tab index ${index} not found. Available tabs: ${tabs.length}`);
+			return false;
+		  }
+		} catch (error) {
+		  logger.error(`[change-rona] Navigation error: ${error}`);
+		  return false;
+		}
+	  }
+	
+	listAvailableTabs() {
+		try {
+		  const tabs = document.querySelectorAll('[role="tab"]');
+		  logger.info(`[change-rona] Available tabs (${tabs.length}):`);
+		  
+		  tabs.forEach((tab, index) => {
+			const label = tab.getAttribute('aria-label') || 
+						 tab.getAttribute('title') || 
+						 tab.textContent.trim();
+			logger.info(`  ${index}: ${label}`);
+		  });
+		} catch (error) {
+		  logger.error(`[change-rona] Error listing tabs: ${error}`);
+		}
+	  }
 
 }
 
