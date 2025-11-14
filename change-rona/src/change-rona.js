@@ -49,6 +49,7 @@ class changeRona extends HTMLElement {
 			logger.error (error);
 		}
 	}
+	
 
 	async agentInteractionEvents() {
 
