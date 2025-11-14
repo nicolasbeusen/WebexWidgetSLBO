@@ -76,7 +76,7 @@ class changeRona extends HTMLElement {
 
 		Desktop.agentContact.addEventListener("eAgentContactEnded", (e => {
 			logger.info('EndCall triggered!')
-			this.navigateToTabBySelector('[arial-label="Realtime Dashboard"]');
+			this.navigateToTabBySelector('[aria-label="RealTime Dashboard"]');
 			this.listAvailableTabs()
 		}));
 	}
